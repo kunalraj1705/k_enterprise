@@ -32,7 +32,7 @@ For every major step, record:
 - PostgreSQL container: `krb-postgres`
 - Database: `krb_enterprise`
 - DB user: `krb`
-- Development DB password was changed to `password` during local setup. Do not commit credentials to source control.
+- Development DB password was changed to `lolnocreds` during local setup. Do not commit credentials to source control.
 
 Initial application startup succeeded with Java 25 and Spring Boot 4.1.0.
 
