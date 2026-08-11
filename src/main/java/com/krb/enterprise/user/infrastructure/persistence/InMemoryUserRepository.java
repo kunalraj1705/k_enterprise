@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.krb.enterprise.user.domain.User;
 import com.krb.enterprise.user.domain.UserRepository;
 
-@Repository
+//@Repository //: This annotation is commented out to indicate that this class is not currently being used as a Spring-managed bean. It can be uncommented if you want to use this in-memory repository in your application context.
 public class InMemoryUserRepository implements UserRepository {
 
     private final Map<UUID, User> users = new ConcurrentHashMap<>();
