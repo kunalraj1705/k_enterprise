@@ -5,7 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.springframework.stereotype.Repository;
+//import org.springframework.stereotype.Repository;
 
 import com.krb.enterprise.user.domain.User;
 import com.krb.enterprise.user.domain.UserRepository;
@@ -29,6 +29,12 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public boolean existsByEmail(String email) {
         return users.values().stream().anyMatch(user -> user.getEmail().equals(email));
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findByEmail'");
     }
 
     // Implementation details would go here

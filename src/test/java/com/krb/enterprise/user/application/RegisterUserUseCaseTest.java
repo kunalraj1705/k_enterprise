@@ -23,9 +23,9 @@ class RegisterUserTest {
         FakeUserRepository fakeUserRepository = new FakeUserRepository();
         FakePasswordHasher fakePasswordHasher = new FakePasswordHasher();
 
-        RegisterUser registerUserUseCase = new RegisterUser(fakeUserRepository, fakePasswordHasher);
+        UserService userService = new UserService(fakeUserRepository, fakePasswordHasher);
 
-        User user = registerUserUseCase.execute("krb@test.com", "myPassword");
+        User user = userService.register("krb@test.com", "myPassword");
         assertNotNull(user.getId());
         assertEquals("krb@test.com", user.getEmail());
         assertEquals(UserStatus.ACTIVE, user.getStatus());
@@ -37,12 +37,12 @@ class RegisterUserTest {
     void shouldRejectDuplicateEmail() {
         FakeUserRepository fakeUserRepository = new FakeUserRepository();
         FakePasswordHasher fakePasswordHasher = new FakePasswordHasher();
-        RegisterUser registerUserUseCase = new RegisterUser(fakeUserRepository, fakePasswordHasher);
+        UserService userService = new UserService(fakeUserRepository, fakePasswordHasher);
 
         // First registration should succeed
-        registerUserUseCase.execute("krb@test.com", "myPassword");
+        userService.register("krb@test.com", "myPassword");
         assertThrows(IllegalArgumentException.class,
-                () -> registerUserUseCase.execute("krb@test.com", "myPassword"));
+                () -> userService.register("krb@test.com", "myPassword"));
     }
 
     static class FakeUserRepository implements UserRepository {
@@ -63,6 +63,11 @@ class RegisterUserTest {
         @Override
         public Optional<User> findById(UUID userId) {
             return Optional.ofNullable(users.get(userId));
+        }
+
+        @Override
+        public Optional<User> findByEmail(String email) {
+           return users.values().stream().filter(u -> u.getEmail().equalsIgnoreCase(email)).findFirst();
         }
     }
 

@@ -31,7 +31,13 @@ public class PostgresUserRepository implements UserRepository {
 
     @Override
     public Optional<User> findById(UUID userId) {
-         return userJpaRepository.findById(userId)
+        return userJpaRepository.findById(userId)
+                .map(UserEntityMapper::toDomain);
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userJpaRepository.findByEmail(email)
                 .map(UserEntityMapper::toDomain);
     }
 

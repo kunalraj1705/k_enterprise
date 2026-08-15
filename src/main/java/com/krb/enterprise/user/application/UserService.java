@@ -1,22 +1,25 @@
 package com.krb.enterprise.user.application;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
 import com.krb.enterprise.user.domain.User;
 import com.krb.enterprise.user.domain.UserRepository;
 
 @Service
-public class RegisterUser {
+public class UserService {
 
     private final UserRepository userRepository;
-     private final PasswordHasher passwordHasher;
+    private final PasswordHasher passwordHasher;
 
-    public RegisterUser(UserRepository userRepository, PasswordHasher passwordHasher) {
+    public UserService(UserRepository userRepository, PasswordHasher passwordHasher) {
         this.userRepository = userRepository;
         this.passwordHasher = passwordHasher;
     }
 
-    public User execute(String email, String password) {
+    public User register(String email, String password) {
         if (userRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("Email already exists.");
         }
@@ -25,6 +28,9 @@ public class RegisterUser {
         User user = User.create(email, passwordHash);
         return userRepository.save(user);
     }
-    
+
+    public Optional<User> findById(UUID userId) {
+        return userRepository.findById(userId);
+    }
 
 }
