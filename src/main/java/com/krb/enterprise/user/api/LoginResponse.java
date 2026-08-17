@@ -1,5 +1,6 @@
 package com.krb.enterprise.user.api;
 
 public record LoginResponse(
-        String message) {
+                String accessToken,
+                String tokenType) {
 }

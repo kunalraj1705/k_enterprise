@@ -1,7 +1,6 @@
 package com.krb.enterprise.user.api;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,11 +24,11 @@ public class AuthController {
     public ResponseEntity<LoginResponse> login(
             @Valid @RequestBody LoginRequest request) {
 
-        Authentication authentication = authService.login(request.email(), request.password());
+        String accessToken = authService.login(request.email(), request.password());
 
         return ResponseEntity.ok(
                 new LoginResponse(
-                        "Authentication successful for "
-                                + authentication.getName()));
+                        accessToken,
+                        "Bearer"));
     }
 }
