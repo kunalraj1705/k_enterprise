@@ -1,4 +1,4 @@
-package com.krb.enterprise.user.infrastructure.security;
+package com.krb.enterprise.security.configuration;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 
-import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 
 @Configuration

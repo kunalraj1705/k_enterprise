@@ -1,4 +1,4 @@
-package com.krb.enterprise.user.infrastructure.security;
+package com.krb.enterprise.security.authentication;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,13 +1,13 @@
-package com.krb.enterprise.user.application;
+package com.krb.enterprise.authentication.service;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import com.krb.enterprise.security.service.JwtService;
 import com.krb.enterprise.user.domain.User;
 import com.krb.enterprise.user.domain.UserRepository;
-import com.krb.enterprise.user.infrastructure.security.JwtService;
 
 @Service
 public class AuthService {

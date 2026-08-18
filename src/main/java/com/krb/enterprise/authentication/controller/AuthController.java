@@ -1,4 +1,4 @@
-package com.krb.enterprise.user.api;
+package com.krb.enterprise.authentication.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.krb.enterprise.user.application.AuthService;
+import com.krb.enterprise.authentication.datamodel.LoginRequest;
+import com.krb.enterprise.authentication.datamodel.LoginResponse;
+import com.krb.enterprise.authentication.service.AuthService;
 
 import jakarta.validation.Valid;
 

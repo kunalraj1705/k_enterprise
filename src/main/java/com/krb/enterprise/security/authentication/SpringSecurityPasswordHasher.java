@@ -1,8 +1,9 @@
-package com.krb.enterprise.user.infrastructure.security;
+package com.krb.enterprise.security.authentication;
 
-import com.krb.enterprise.user.application.PasswordHasher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import com.krb.enterprise.user.application.PasswordHasher;
 
 @Component
 public class SpringSecurityPasswordHasher implements PasswordHasher{
@@ -12,7 +13,7 @@ public class SpringSecurityPasswordHasher implements PasswordHasher{
      public SpringSecurityPasswordHasher(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
-
+    
     @Override
     public String hash(String rawPassword) {
         return passwordEncoder.encode(rawPassword);

@@ -1,4 +1,4 @@
-package com.krb.enterprise.user.api;
+package com.krb.enterprise.authentication.datamodel;
 
 public record LoginResponse(
                 String accessToken,

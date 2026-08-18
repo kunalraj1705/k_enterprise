@@ -1,4 +1,4 @@
-package com.krb.enterprise.user.infrastructure.security;
+package com.krb.enterprise.security.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.krb.enterprise.security.authentication.SpringSecurityPasswordHasher;
+
 public class SpringSecurityPasswordHasherTest {
 
     private final PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();

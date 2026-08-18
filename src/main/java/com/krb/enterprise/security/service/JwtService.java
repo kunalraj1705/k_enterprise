@@ -1,4 +1,4 @@
-package com.krb.enterprise.user.infrastructure.security;
+package com.krb.enterprise.security.service;
 
 import java.time.Instant;
 
@@ -7,6 +7,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
+import com.krb.enterprise.security.configuration.JwtProperties;
 import com.krb.enterprise.user.domain.User;
 
 @Service
