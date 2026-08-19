@@ -19,6 +19,9 @@ public class UserEntity {
     @Column(nullable = false)
     private UUID id;
 
+    @Column(name = "user_id", nullable = false, length = 8, unique = true)
+    private String userId;
+
     @Column(nullable = false, length = 320)
     private String email;
 
@@ -42,6 +45,7 @@ public class UserEntity {
 
     public UserEntity(
             UUID id,
+            String userId,
             String email,
             String passwordHash,
             String status,
@@ -55,6 +59,7 @@ public class UserEntity {
         this.role = role;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.userId = userId;
     }
 
     public UUID getId() {
@@ -83,5 +88,8 @@ public class UserEntity {
 
     public Instant getUpdatedAt() {
         return updatedAt;
+    }
+    public String getUserId() {
+        return userId;
     }
 }

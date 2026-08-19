@@ -12,6 +12,7 @@ public final class UserEntityMapper {
     public static UserEntity toEntity(User user) {
         return new UserEntity(
                 user.getId(),
+                user.getUserId(),
                 user.getEmail(),
                 user.getPasswordHash(),
                 user.getStatus().name(),
@@ -24,6 +25,7 @@ public final class UserEntityMapper {
     public static User toDomain(UserEntity entity) {
         return new User(
                 entity.getId(),
+                entity.getUserId(),
                 entity.getEmail(),
                 entity.getPasswordHash(),
                 UserRole.valueOf(entity.getRole()),

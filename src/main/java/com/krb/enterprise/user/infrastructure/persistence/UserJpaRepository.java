@@ -11,4 +11,6 @@ public interface UserJpaRepository
     boolean existsByEmail(String email);
 
     Optional<UserEntity> findByEmail(String email);
+
+    Optional<UserEntity> findByUserId(String userId);
 }

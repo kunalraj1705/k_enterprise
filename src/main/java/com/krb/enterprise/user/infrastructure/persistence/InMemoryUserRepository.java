@@ -33,10 +33,12 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findByEmail'");
+        return users.values().stream().filter(user -> user.getEmail().equals(email)).findFirst();
     }
 
-    // Implementation details would go here
+    @Override
+    public Optional<User> findByUserId(String userId) {
+        return users.values().stream().filter(user -> user.getUserId().equals(userId)).findFirst();
+    }
 
 }

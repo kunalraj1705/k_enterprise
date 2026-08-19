@@ -41,4 +41,10 @@ public class PostgresUserRepository implements UserRepository {
                 .map(UserEntityMapper::toDomain);
     }
 
+    @Override
+    public Optional<User> findByUserId(String userId) {
+          return userJpaRepository.findByUserId(userId)
+            .map(UserEntityMapper::toDomain);
+    }
+
 }

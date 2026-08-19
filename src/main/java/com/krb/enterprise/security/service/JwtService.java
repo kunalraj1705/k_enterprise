@@ -31,7 +31,7 @@ public class JwtService {
                 jwtProperties.expirationMinutes() * 60);
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
-                .subject(user.getId().toString())
+                .subject(user.getUserId().toString())
                 .claim("email", user.getEmail())
                 .claim("role", user.getRole().name())
                 .issuedAt(now)

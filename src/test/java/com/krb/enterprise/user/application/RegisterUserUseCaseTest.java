@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import com.krb.enterprise.user.domain.User;
 import com.krb.enterprise.user.domain.UserRepository;
+import com.krb.enterprise.user.domain.UserRole;
 import com.krb.enterprise.user.domain.UserStatus;
 
 class RegisterUserTest {
@@ -22,10 +23,11 @@ class RegisterUserTest {
         // Test implementation for registering a new user
         FakeUserRepository fakeUserRepository = new FakeUserRepository();
         FakePasswordHasher fakePasswordHasher = new FakePasswordHasher();
+        FakeUserIdGenerator fakeUserIdGenerator = new FakeUserIdGenerator();
 
-        UserService userService = new UserService(fakeUserRepository, fakePasswordHasher);
+        UserService userService = new UserService(fakeUserRepository, fakePasswordHasher, fakeUserIdGenerator);
 
-        User user = userService.register("krb@test.com", "myPassword");
+        User user = userService.register("krb@test.com", "myPassword", UserRole.CUSTOMER);
         assertNotNull(user.getId());
         assertEquals("krb@test.com", user.getEmail());
         assertEquals(UserStatus.ACTIVE, user.getStatus());
@@ -37,12 +39,13 @@ class RegisterUserTest {
     void shouldRejectDuplicateEmail() {
         FakeUserRepository fakeUserRepository = new FakeUserRepository();
         FakePasswordHasher fakePasswordHasher = new FakePasswordHasher();
-        UserService userService = new UserService(fakeUserRepository, fakePasswordHasher);
+        FakeUserIdGenerator fakeUserIdGenerator = new FakeUserIdGenerator();
+        UserService userService = new UserService(fakeUserRepository, fakePasswordHasher, fakeUserIdGenerator);
 
         // First registration should succeed
-        userService.register("krb@test.com", "myPassword");
+        userService.register("krb@test.com", "myPassword", UserRole.CUSTOMER);
         assertThrows(IllegalArgumentException.class,
-                () -> userService.register("krb@test.com", "myPassword"));
+                () -> userService.register("krb@test.com", "myPassword", UserRole.CUSTOMER));
     }
 
     static class FakeUserRepository implements UserRepository {
@@ -67,7 +70,12 @@ class RegisterUserTest {
 
         @Override
         public Optional<User> findByEmail(String email) {
-           return users.values().stream().filter(u -> u.getEmail().equalsIgnoreCase(email)).findFirst();
+            return users.values().stream().filter(u -> u.getEmail().equalsIgnoreCase(email)).findFirst();
+        }
+
+        @Override
+        public Optional<User> findByUserId(String userId) { 
+            return users.values().stream().filter(u -> u.getUserId().equals(userId)).findFirst();
         }
     }
 
@@ -85,6 +93,14 @@ class RegisterUserTest {
 
             return passwordHash.equals(
                     "hashed-" + rawPassword);
+        }
+    }
+
+    static class FakeUserIdGenerator implements UserIdGenerator {
+
+        @Override
+        public String generate(UserRole userRole) {
+            return UUID.randomUUID().toString();
         }
     }
 

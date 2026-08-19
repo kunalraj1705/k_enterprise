@@ -5,6 +5,7 @@ import java.util.UUID;
 
 public class User {
     private final UUID id;
+    private final String userId;
     private final String email;
     private final String passwordHash;
     private UserRole role;
@@ -12,9 +13,11 @@ public class User {
     private final Instant createdAt;
     private Instant updatedAt;
 
-    public User(UUID id, String email, String passwordHash, UserRole role, UserStatus status, Instant createdAt,
+    public User(UUID id, String userId, String email, String passwordHash, UserRole role, UserStatus status,
+            Instant createdAt,
             Instant updatedAt) {
         this.id = id;
+        this.userId = userId;
         this.email = email;
         this.passwordHash = passwordHash;
         this.role = role;
@@ -23,9 +26,9 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public static User create(String email, String passwordHash) {
+    public static User create(String userId, String email, String passwordHash, UserRole role) {
         Instant now = Instant.now();
-        return new User(UUID.randomUUID(), email, passwordHash, UserRole.CUSTOMER, UserStatus.ACTIVE, now, now);
+        return new User(UUID.randomUUID(), userId, email, passwordHash, role, UserStatus.ACTIVE, now, now);
     }
 
     public void suspend() {
@@ -70,6 +73,10 @@ public class User {
 
     public Instant getUpdatedAt() {
         return updatedAt;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 
 }
