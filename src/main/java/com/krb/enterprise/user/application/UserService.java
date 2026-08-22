@@ -48,4 +48,18 @@ public class UserService {
         return userRepository.findByUserId(userId);
     }
 
+    public User suspendUser(String userId) {
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new ApplicationException(HttpStatus.NOT_FOUND, "User not found: " + userId));
+        user.suspend();
+        return userRepository.save(user);
+    }
+
+    public User activateUser(String userId) {
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new ApplicationException(HttpStatus.NOT_FOUND, "User not found: " + userId));
+        user.activate();
+        return userRepository.save(user);
+    }
+
 }

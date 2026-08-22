@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -74,5 +75,19 @@ public class UserController {
                 .orElseThrow(() -> new ApplicationException(
                         HttpStatus.NOT_FOUND,
                         "User not found: " + userId));
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATIONS')")
+    @PatchMapping("/{userId}/suspend")
+    public UserResponse suspendUser(@PathVariable String userId) {
+        User user = userService.suspendUser(userId);
+        return UserResponse.from(user);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATIONS')")
+    @PatchMapping("/{userId}/activate")
+    public UserResponse activateUser(@PathVariable String userId) {
+        User user = userService.activateUser(userId);
+        return UserResponse.from(user);
     }
 }

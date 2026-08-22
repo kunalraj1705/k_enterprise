@@ -3,6 +3,10 @@ package com.krb.enterprise.user.domain;
 import java.time.Instant;
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
+
+import com.krb.enterprise.common.exception.ApplicationException;
+
 public class User {
     private final UUID id;
     private final String userId;
@@ -33,7 +37,7 @@ public class User {
 
     public void suspend() {
         if (this.status == UserStatus.SUSPENDED) {
-            throw new IllegalStateException("User is already suspended.");
+            throw new ApplicationException(HttpStatus.CONFLICT, "User is already suspended.");
         }
         status = UserStatus.SUSPENDED;
         updatedAt = Instant.now();
@@ -41,7 +45,7 @@ public class User {
 
     public void activate() {
         if (this.status == UserStatus.ACTIVE) {
-            throw new IllegalStateException("User is already active.");
+            throw new ApplicationException(HttpStatus.CONFLICT, "User is already active.");
         }
         status = UserStatus.ACTIVE;
         updatedAt = Instant.now();
