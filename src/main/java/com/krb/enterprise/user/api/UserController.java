@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.krb.enterprise.common.exception.ApplicationException;
 import com.krb.enterprise.user.application.UserService;
 import com.krb.enterprise.user.domain.User;
-import com.krb.enterprise.user.domain.UserRole;
 
 import jakarta.validation.Valid;
 
