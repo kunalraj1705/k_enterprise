@@ -44,7 +44,7 @@ class RegisterUserTest {
 
         // First registration should succeed
         userService.register("krb@test.com", "myPassword", UserRole.CUSTOMER);
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(ApplicationException.class,
                 () -> userService.register("krb@test.com", "myPassword", UserRole.CUSTOMER));
     }
 

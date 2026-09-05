@@ -8,6 +8,8 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
+import com.krb.enterprise.common.exception.ApplicationException;
+
 public class UserTest {
 
     @Test
@@ -44,12 +46,12 @@ public class UserTest {
     public void shouldNotSuspendAlreadySuspendedUser() {
         User user = User.create(UUID.randomUUID().toString(), "krb@test.com", "password123", UserRole.CUSTOMER);
         user.suspend();
-        assertThrows(IllegalStateException.class, user::suspend);
+        assertThrows(ApplicationException.class, user::suspend);
     }
 
     @Test
     public void shouldNotActivateAlreadyActiveUser() {
         User user = User.create(UUID.randomUUID().toString(), "krb@test.com", "password123", UserRole.CUSTOMER);
-        assertThrows(IllegalStateException.class, user::activate);
+        assertThrows(ApplicationException.class, user::activate);
     }
 }
