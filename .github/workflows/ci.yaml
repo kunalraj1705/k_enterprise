@@ -10,7 +10,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: kunalraj1705/krb_enterprise
+  IMAGE_NAME: kunalraj1705/k_enterprise
 
 jobs:
   build:
