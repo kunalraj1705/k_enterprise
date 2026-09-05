@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
+import com.krb.enterprise.common.exception.ApplicationException;
 import com.krb.enterprise.user.domain.User;
 import com.krb.enterprise.user.domain.UserRepository;
 import com.krb.enterprise.user.domain.UserRole;
