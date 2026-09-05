@@ -9,46 +9,55 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RsaKeyConfiguration {
 
-    private static final Path PRIVATE_KEY_PATH = Path.of(System.getProperty("user.home"),".krb-enterprise", "secrets", "private-key.pem");
-    private static final Path PUBLIC_KEY_PATH = Path.of(System.getProperty("user.home"),".krb-enterprise", "secrets", "public-key.pem");
+        private final Path privateKeyPath;
+        private final Path publicKeyPath;
 
-    @Bean
-    public RSAPrivateKey rsaPrivateKey() throws Exception {
+        public RsaKeyConfiguration(
+                        @Value("${krb.security.jwt.private-key-path:${user.home}/.krb-enterprise/secrets/private-key.pem}") String privateKeyPath,
+                        @Value("${krb.security.jwt.public-key-path:${user.home}/.krb-enterprise/secrets/public-key.pem}") String publicKeyPath) {
 
-        String key = Files.readString(PRIVATE_KEY_PATH)
-                .replace("-----BEGIN PRIVATE KEY-----", "")
-                .replace("-----END PRIVATE KEY-----", "")
-                .replaceAll("\\s", "");
+                this.privateKeyPath = Path.of(privateKeyPath);
+                this.publicKeyPath = Path.of(publicKeyPath);
+        }
 
-        byte[] decoded = Base64.getDecoder().decode(key);
+        @Bean
+        public RSAPrivateKey rsaPrivateKey() throws Exception {
 
-        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(decoded);
+                String key = Files.readString(privateKeyPath)
+                                .replace("-----BEGIN PRIVATE KEY-----", "")
+                                .replace("-----END PRIVATE KEY-----", "")
+                                .replaceAll("\\s", "");
 
-        return (RSAPrivateKey) KeyFactory
-                .getInstance("RSA")
-                .generatePrivate(spec);
-    }
+                byte[] decoded = Base64.getDecoder().decode(key);
 
-    @Bean
-    public RSAPublicKey rsaPublicKey() throws Exception {
+                PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(decoded);
 
-        String key = Files.readString(PUBLIC_KEY_PATH)
-                .replace("-----BEGIN PUBLIC KEY-----", "")
-                .replace("-----END PUBLIC KEY-----", "")
-                .replaceAll("\\s", "");
+                return (RSAPrivateKey) KeyFactory
+                                .getInstance("RSA")
+                                .generatePrivate(spec);
+        }
 
-        byte[] decoded = Base64.getDecoder().decode(key);
+        @Bean
+        public RSAPublicKey rsaPublicKey() throws Exception {
 
-        X509EncodedKeySpec spec = new X509EncodedKeySpec(decoded);
+                String key = Files.readString(publicKeyPath)
+                                .replace("-----BEGIN PUBLIC KEY-----", "")
+                                .replace("-----END PUBLIC KEY-----", "")
+                                .replaceAll("\\s", "");
 
-        return (RSAPublicKey) KeyFactory
-                .getInstance("RSA")
-                .generatePublic(spec);
-    }
+                byte[] decoded = Base64.getDecoder().decode(key);
+
+                X509EncodedKeySpec spec = new X509EncodedKeySpec(decoded);
+
+                return (RSAPublicKey) KeyFactory
+                                .getInstance("RSA")
+                                .generatePublic(spec);
+        }
 }
