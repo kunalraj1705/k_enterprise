@@ -15,6 +15,14 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v5
+        with:
+          path: k_enterprise
+
+      - name: Checkout infrastructure
+        uses: actions/checkout@v5
+        with:
+          repository: kunalraj1705/k_enterprise_infra
+          path: k_enterprise_infra
 
       - name: Set up Java 25
         uses: actions/setup-java@v5
@@ -24,4 +32,16 @@ jobs:
           cache: maven
 
       - name: Build and test
+        working-directory: k_enterprise
         run: ./mvnw clean verify
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: k_enterprise
+          file: k_enterprise_infra/docker/Dockerfile
+          push: false
+          tags: krb-enterprise:ci
