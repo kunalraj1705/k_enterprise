@@ -77,4 +77,4 @@ jobs:
           echo "Docker:"
           docker --version
           echo "Docker-Compose:"
-          docker compose version
+          docker-compose version
