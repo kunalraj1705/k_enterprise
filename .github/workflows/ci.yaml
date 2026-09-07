@@ -60,8 +60,8 @@ jobs:
           file: k_enterprise_infra/docker/Dockerfile
           push: ${{ github.event_name == 'push' }}
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+            ${{ env.IMAGE_NAME }}:latest
+            ${{ env.IMAGE_NAME }}:${{ github.sha }}
 
   deploy-to-uat:
     name: Deploy to UAT
