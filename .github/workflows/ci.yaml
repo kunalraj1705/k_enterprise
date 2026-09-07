@@ -78,14 +78,27 @@ jobs:
           repository: kunalraj1705/k_enterprise_infra
           path: k_enterprise_infra
 
-      - name: Inspect workspace
+      - name: Deploy application
         run: |
-          echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
-          echo "PWD=$(pwd)"
-          echo "Directory tree:"
-          find "$GITHUB_WORKSPACE" -maxdepth 4 -type f \
-            \( -name "compose.yaml" -o -name "Dockerfile" \) -print
+          export IMAGE_TAG=${{ github.sha }}
 
-      - name: Verify Compose file
+          COMPOSE_FILE="$GITHUB_WORKSPACE/k_enterprise_infra/compose/compose.yaml"
+
+          echo "Deploying image:"
+          echo "ghcr.io/kunalraj1705/k_enterprise:${IMAGE_TAG}"
+
+          docker-compose \
+            -f "$COMPOSE_FILE" \
+            pull krb-enterprise
+
+          docker-compose \
+            -f "$COMPOSE_FILE" \
+            up -d krb-enterprise
+
+      - name: Verify deployment
         run: |
-          find "$GITHUB_WORKSPACE" -name compose.yaml -print
+          COMPOSE_FILE="$GITHUB_WORKSPACE/k_enterprise_infra/compose/compose.yaml"
+
+          docker-compose \
+            -f "$COMPOSE_FILE" \
+            ps
