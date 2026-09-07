@@ -78,15 +78,22 @@ jobs:
           repository: kunalraj1705/k_enterprise_infra
           path: k_enterprise_infra
 
+      - name: Verify deployment files
+        run: |
+          pwd
+          ls -la
+          ls -la k_enterprise_infra
+          ls -la k_enterprise_infra/compose
+
       - name: Deploy application
         working-directory: k_enterprise_infra/compose
         run: |
           export IMAGE_TAG=${{ github.sha }}
 
-          docker-compose pull krb-enterprise
-          docker-compose up -d krb-enterprise
+          docker-compose -f compose.yaml pull krb-enterprise
+          docker-compose -f compose.yaml up -d krb-enterprise
 
       - name: Verify deployment
         working-directory: k_enterprise_infra/compose
         run: |
-          docker-compose ps
+          docker-compose -f compose.yaml ps
