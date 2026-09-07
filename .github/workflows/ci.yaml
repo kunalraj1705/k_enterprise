@@ -93,11 +93,19 @@ jobs:
 
           cd "$DEPLOY_DIR"
 
-          echo "Deploying:"
+          echo "Pulling:"
           echo "ghcr.io/kunalraj1705/k_enterprise:${IMAGE_TAG}"
 
+          docker pull "ghcr.io/kunalraj1705/k_enterprise:${IMAGE_TAG}"
+
+          docker tag \
+          "ghcr.io/kunalraj1705/k_enterprise:${IMAGE_TAG}" \
+          "k_enterprise:${IMAGE_TAG}"
+
+          echo "Local image:"
+          echo "k_enterprise:${IMAGE_TAG}"
+
           docker-compose -f compose.yaml config
-          docker-compose -f compose.yaml pull krb-enterprise
           docker-compose -f compose.yaml up -d krb-enterprise
 
       - name : Verify deployment
