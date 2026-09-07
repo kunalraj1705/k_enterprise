@@ -76,5 +76,5 @@ jobs:
           uname -a
           echo "Docker:"
           docker --version
-          echo "Docker Compose:"
+          echo "Docker-Compose:"
           docker compose version
