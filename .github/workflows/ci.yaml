@@ -63,18 +63,30 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
-  uat-runner-test:
-    name: Test UAT Runner
+  deploy-to-uat:
+    name: Deploy to UAT
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: [self-hosted, linux, x64, uat]
 
+    environment: UAT
+
     steps:
-      - name: Verify runner
+      - name: Checkout infrastructure
+        uses: actions/checkout@v5
+        with:
+          repository: kunalraj1705/k_enterprise_infra
+          path: k_enterprise_infra
+
+      - name: Deploy application
+        working-directory: k_enterprise_infra/compose
         run: |
-          echo "Runner: $(hostname)"
-          echo "User: $(whoami)"
-          echo "OS:"
-          uname -a
-          echo "Docker:"
-          docker --version
-          echo "Docker-Compose:"
-          docker-compose version
+          export IMAGE_TAG=${{ github.sha }}
+
+          docker-compose pull krb-enterprise
+          docker-compose up -d krb-enterprise
+
+      - name: Verify deployment
+        working-directory: k_enterprise_infra/compose
+        run: |
+          docker-compose ps
