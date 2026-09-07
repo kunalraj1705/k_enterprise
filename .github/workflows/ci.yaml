@@ -35,8 +35,8 @@ jobs:
       - name: Set up Java 25
         uses: actions/setup-java@v5
         with:
-          java-version: '25'
-          distribution: 'temurin'
+          java-version: "25"
+          distribution: "temurin"
           cache: maven
 
       - name: Build and test
@@ -79,19 +79,24 @@ jobs:
 
       - name: Deploy application
         run: |
-          export IMAGE_TAG=${{ github.sha }}
+          export IMAGE_TAG="${{ github.sha }}"
+          export SPRING_PROFILES_ACTIVE="${{ vars.SPRING_PROFILES_ACTIVE }}"
+          export DB_URL="${{ vars.DB_URL }}"
+          export DB_USERNAME="${{ vars.DB_USERNAME }}"
+          export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
 
           DEPLOY_DIR="/home/github-runner/deploy"
           mkdir -p "$DEPLOY_DIR"
 
           cp "$GITHUB_WORKSPACE/k_enterprise_infra/compose/compose.yaml" \
-             "$DEPLOY_DIR/compose.yaml"
+          "$DEPLOY_DIR/compose.yaml"
 
           cd "$DEPLOY_DIR"
 
           echo "Deploying:"
           echo "ghcr.io/kunalraj1705/k_enterprise:${IMAGE_TAG}"
 
+          docker-compose -f compose.yaml config
           docker-compose -f compose.yaml pull krb-enterprise
           docker-compose -f compose.yaml up -d krb-enterprise
 
