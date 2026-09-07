@@ -84,6 +84,10 @@ jobs:
 
           COMPOSE_FILE="$GITHUB_WORKSPACE/k_enterprise_infra/compose/compose.yaml"
 
+          if [ ! -f "$COMPOSE_FILE" ]; then
+            echo "ERROR: compose.yaml not found at $COMPOSE_FILE"
+            exit 1
+          fi
           echo "Deploying image:"
           echo "ghcr.io/kunalraj1705/k_enterprise:${IMAGE_TAG}"
 
