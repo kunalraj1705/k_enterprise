@@ -55,13 +55,14 @@ public class SecurityConfiguration {
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/v1/user/customer",
-                                "/api/v1/auth/login")
+                                "/api/v1/auth/login",
+                                "/actuator/health")
                         .permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt
-                            .decoder(jwtDecoder)
-                            .jwtAuthenticationConverter(jwtAuthenticationConverter))
+                                .decoder(jwtDecoder)
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter))
                         .authenticationEntryPoint(authenticationEntryPoint)
                         .accessDeniedHandler(accessDeniedHandler));
 
