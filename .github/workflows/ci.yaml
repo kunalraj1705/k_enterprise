@@ -62,3 +62,19 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+  uat-runner-test:
+    name: Test UAT Runner
+    runs-on: [self-hosted, linux, x64, uat]
+
+    steps:
+      - name: Verify runner
+        run: |
+          echo "Runner: $(hostname)"
+          echo "User: $(whoami)"
+          echo "OS:"
+          uname -a
+          echo "Docker:"
+          docker --version
+          echo "Docker Compose:"
+          docker compose version
