@@ -55,10 +55,10 @@ public class SecurityConfiguration {
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/v1/user/customer",
-                                "/api/v1/auth/login",
-                                "/actuator/health")
+                                "/api/v1/auth/login")
                         .permitAll()
                         .anyRequest().authenticated())
+                .authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.GET, "/actuator/health").permitAll())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt
                                 .decoder(jwtDecoder)
