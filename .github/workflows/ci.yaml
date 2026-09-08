@@ -111,4 +111,26 @@ jobs:
       - name : Verify deployment
         run: |
           cd /home/github-runner/deploy
+          echo "Container status:"
           docker-compose -f compose.yaml ps
+
+          echo "Waiting for application health..."
+
+          for i in {1..12}; do
+          if curl --fail --silent --show-error \
+            http://localhost:8282/krbenterprise/actuator/health; then
+            echo
+            echo "Application health check passed."
+            exit 0
+          fi
+
+          echo "Application not healthy yet. Attempt $i/12..."
+          sleep 5
+          done
+
+          echo "Application failed health check."
+
+          echo "Application logs:"
+          docker-compose -f compose.yaml logs --tail=100 krb-enterprise
+
+          exit 1
