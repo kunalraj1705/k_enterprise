@@ -57,8 +57,11 @@ public class SecurityConfiguration {
                                 "/api/v1/user/customer",
                                 "/api/v1/auth/login")
                         .permitAll()
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/actuator/health")
+                        .permitAll()
                         .anyRequest().authenticated())
-                .authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.GET, "/actuator/health").permitAll())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt
                                 .decoder(jwtDecoder)
