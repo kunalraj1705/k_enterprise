@@ -94,16 +94,16 @@ jobs:
           cd "$DEPLOY_DIR"
 
           echo "Pulling:"
-          echo "ghcr.io/kunalraj1705/k_enterprise:${IMAGE_TAG}"
+          echo "ghcr.io/kunalraj1705/krbenterprise:${IMAGE_TAG}"
 
-          docker pull "ghcr.io/kunalraj1705/k_enterprise:${IMAGE_TAG}"
+          docker pull "ghcr.io/kunalraj1705/krbenterprise:${IMAGE_TAG}"
 
           docker tag \
-          "ghcr.io/kunalraj1705/k_enterprise:${IMAGE_TAG}" \
-          "k_enterprise:${IMAGE_TAG}"
+          "ghcr.io/kunalraj1705/krbenterprise:${IMAGE_TAG}" \
+          "krbenterprise:${IMAGE_TAG}"
 
           echo "Local image:"
-          echo "k_enterprise:${IMAGE_TAG}"
+          echo "krbenterprise:${IMAGE_TAG}"
 
           docker-compose -f compose.yaml config
           docker-compose -f compose.yaml up -d krb-enterprise
