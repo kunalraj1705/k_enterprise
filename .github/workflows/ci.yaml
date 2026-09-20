@@ -84,9 +84,27 @@ jobs:
           echo "Deploying image:"
           echo "$IMAGE"
 
+          CURRENT_REPLICAS=$(kubectl get deployment krb-enterprise \
+            -n uat-core \
+            -o jsonpath='{.spec.replicas}')
+
+          echo "Current replicas: $CURRENT_REPLICAS"
+
           kubectl set image deployment/krb-enterprise \
             krb-enterprise="$IMAGE" \
             -n uat-core
+
+          if [ "$CURRENT_REPLICAS" -eq 0 ]; then
+            echo "Application is currently scaled to 0."
+            echo "Starting application with 2 replicas..."
+
+            kubectl scale deployment/krb-enterprise \
+              --replicas=2 \
+              -n uat-core
+          else
+            echo "Application already has $CURRENT_REPLICAS replicas."
+            echo "Keeping existing replica count."
+          fi
 
           kubectl rollout status deployment/krb-enterprise \
             -n uat-core \
