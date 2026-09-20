@@ -120,6 +120,10 @@ jobs:
           kubectl get deployment krb-enterprise -n uat-core
 
           echo
+          echo "Waiting 60 seconds for application and ingress to stabilize..."
+          sleep 60
+          
+          echo
           echo "Waiting for application health..."
 
           for i in {1..12}; do
@@ -133,7 +137,7 @@ jobs:
             fi
 
             echo "Application not healthy yet. Attempt $i/12..."
-            sleep 5
+            sleep 15
           done
 
           echo "Application failed health check."
