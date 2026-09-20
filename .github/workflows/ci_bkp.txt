@@ -77,62 +77,60 @@ jobs:
           repository: kunalraj1705/k_enterprise_infra
           path: k_enterprise_infra
 
-      - name: Deploy application to Kubernetes
+      - name: Deploy application
         run: |
-          IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
+          export IMAGE_TAG="${{ github.sha }}"
+          export SPRING_PROFILES_ACTIVE="${{ vars.SPRING_PROFILES_ACTIVE }}"
+          export DB_URL="${{ vars.DB_URL }}"
+          export DB_USERNAME="${{ vars.DB_USERNAME }}"
+          export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
 
-          echo "Deploying image:"
-          echo "$IMAGE"
+          DEPLOY_DIR="/home/github-runner/deploy"
+          mkdir -p "$DEPLOY_DIR"
 
-          kubectl set image deployment/krb-enterprise \
-            krb-enterprise="$IMAGE" \
-            -n uat-core
+          cp "$GITHUB_WORKSPACE/k_enterprise_infra/compose/compose.yaml" \
+          "$DEPLOY_DIR/compose.yaml"
 
-          kubectl rollout status deployment/krb-enterprise \
-            -n uat-core \
-            --timeout=180s
+          cd "$DEPLOY_DIR"
 
-      - name: Verify Kubernetes deployment
+          echo "Pulling:"
+          echo "ghcr.io/kunalraj1705/krbenterprise:${IMAGE_TAG}"
+
+          docker pull "ghcr.io/kunalraj1705/krbenterprise:${IMAGE_TAG}"
+
+          docker tag \
+          "ghcr.io/kunalraj1705/krbenterprise:${IMAGE_TAG}" \
+          "krbenterprise:${IMAGE_TAG}"
+
+          echo "Local image:"
+          echo "krbenterprise:${IMAGE_TAG}"
+
+          docker-compose -f compose.yaml config
+          docker-compose -f compose.yaml up -d krb-enterprise
+
+      - name : Verify deployment
         run: |
-          echo "Pods:"
-          kubectl get pods -n uat-core -o wide
+          cd /home/github-runner/deploy
+          echo "Container status:"
+          docker-compose -f compose.yaml ps
 
-          echo
-          echo "Deployment:"
-          kubectl get deployment krb-enterprise -n uat-core
-
-          echo
           echo "Waiting for application health..."
 
           for i in {1..12}; do
-            if curl --fail --silent --show-error \
-              -H "Host: uat-customer.krbenterprise.com" \
-              http://10.0.2.15:31851/krbenterprise/actuator/health; then
+          if curl --fail --silent --show-error \
+            http://localhost:8282/krbenterprise/actuator/health; then
+            echo
+            echo "Application health check passed."
+            exit 0
+          fi
 
-              echo
-              echo "Application health check passed."
-              exit 0
-            fi
-
-            echo "Application not healthy yet. Attempt $i/12..."
-            sleep 5
+          echo "Application not healthy yet. Attempt $i/12..."
+          sleep 5
           done
 
           echo "Application failed health check."
 
-          echo
-          echo "Pods:"
-          kubectl get pods -n uat-core -o wide
-
-          echo
-          echo "Deployment:"
-          kubectl describe deployment krb-enterprise -n uat-core
-
-          echo
-          echo "Pod events:"
-          kubectl get events \
-            -n uat-core \
-            --sort-by='.lastTimestamp' \
-            | tail -50
+          echo "Application logs:"
+          docker-compose -f compose.yaml logs --tail=100 krb-enterprise
 
           exit 1
